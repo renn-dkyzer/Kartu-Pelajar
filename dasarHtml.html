@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kartu Pelajaran</title>
+  <style>
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --accent:#2b6cb0;
+      --muted:#65748b;
+      --success:#16a34a;
+      --shadow: 0 6px 18px rgba(23,32,45,0.08);
+      --radius:12px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{background:linear-gradient(180deg,#eef4fb 0%,var(--bg) 100%);padding:28px;}
+
+    .container{max-width:920px;margin:0 auto}
+    header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:18px}
+    header h1{font-size:20px;margin:0;color:#0f172a}
+    header p{margin:0;color:var(--muted);font-size:13px}
+
+    .wrap{display:grid;grid-template-columns:360px 1fr;gap:20px}
+
+    /* Card preview */
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;}
+    .card-top{display:flex;align-items:center;gap:12px}
+    .logo{width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#6fa8ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:20px}
+    .school{flex:1}
+    .school h2{margin:0;font-size:16px}
+    .school small{display:block;color:var(--muted);margin-top:6px}
+
+    .meta{display:flex;gap:8px;margin-top:16px}
+    .meta .m{flex:1;background:#f8fafc;padding:10px;border-radius:8px;border:1px solid #eef2f7}
+    .m strong{display:block;font-size:13px}
+    .m span{display:block;color:var(--muted);font-size:12px;margin-top:6px}
+
+    hr{border:none;border-top:1px dashed #eef2f7;margin:18px 0}
+
+    .desc{font-size:13px;color:var(--muted);line-height:1.45}
+
+    .grades{margin-top:12px}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #f1f5f9}
+    th{font-weight:600;color:var(--muted);font-size:12px}
+    tfoot td{font-weight:700}
+
+    .note{margin-top:14px;background:#f8fafc;padding:10px;border-radius:8px;border:1px solid #eef2f7;font-size:13px}
+
+    /* Controls */
+    .form-panel{display:flex;flex-direction:column;gap:12px}
+    label{font-size:13px;color:#1f2937}
+    input[type="text"],select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #dbeafe;background:white;font-size:13px}
+    textarea{min-height:92px;resize:vertical}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .actions{display:flex;gap:10px;align-items:center}
+    button{background:var(--accent);color:white;border:0;padding:10px 12px;border-radius:8px;font-weight:600;cursor:pointer}
+    .btn-ghost{background:transparent;border:1px solid #e2e8f0;color:#0b1220}
+
+    .small{font-size:12px;color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width:880px){.wrap{grid-template-columns:1fr;}.card{order:2}}
+
+    /* Print */
+    @media print{
+      body{background:white;padding:0}
+      header, .form-panel, .actions{display:none}
+      .container{max-width:100%}
+      .card{box-shadow:none;border-radius:0}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Kartu Pelajaran</h1>
+        <p class="small">Versi interaktif: ubah data di sebelah kanan untuk langsung melihat pratinjau kartu.</p>
+      </div>
+      <div class="actions">
+        <button id="printBtn">Cetak / Simpan PDF</button>
+        <button id="resetBtn" class="btn-ghost">Reset</button>
+      </div>
+    </header>
+
+    <div class="wrap">
+
+      <!-- PREVIEW -->
+      <div class="card" id="previewCard">
+        <div class="card-top">
+          <div class="logo" id="logoText">KP</div>
+          <div class="school">
+            <h2 id="schoolName">SMK Negeri 1 Wadaslintang</h2>
+            <small id="schoolAddr">Jl. Pendidikan No.1 — Wadaslintang</small>
+          </div>
+          <div style="text-align:right">
+            <div class="small">Semester</div>
+            <strong id="semesterText">Ganjil 2025/2026</strong>
+          </div>
+        </div>
+
+        <div class="meta">
+          <div class="m">
+            <strong id="studentName">Reno Tri</strong>
+            <span>Nama Siswa</span>
+          </div>
+          <div class="m">
+            <strong id="classText">X PPLG 1</strong>
+            <span>Kelas</span>
+          </div>
+          <div class="m">
+            <strong id="subjectText">Dasar Pemrograman Komputer</strong>
+            <span>Mata Pelajaran</span>
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="desc" id="descText">Mata pelajaran ini membahas dasar-dasar logika pemrograman, algoritma, serta pengenalan bahasa pemrograman seperti C# dan Python. Tujuannya agar siswa mampu memahami cara kerja program komputer dan membuat aplikasi sederhana.</div>
+
+        <div class="grades">
+          <table>
+            <thead>
+              <tr><th>No</th><th>Komponen</th><th>Bobot</th><th>Nilai</th></tr>
+            </thead>
+            <tbody id="gradesBody">
+              <tr><td>1</td><td>Tugas Harian</td><td>30%</td><td id="g1">90</td></tr>
+              <tr><td>2</td><td>UTS</td><td>30%</td><td id="g2">85</td></tr>
+              <tr><td>3</td><td>UAS</td><td>40%</td><td id="g3">88</td></tr>
+            </tbody>
+            <tfoot>
+              <tr><td></td><td>Total</td><td>100%</td><td id="totalGrade">88.4</td></tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="note">
+          <div><strong>Catatan Guru:</strong> <span id="noteText">Reno aktif dalam pembelajaran, rajin mengerjakan tugas, dan memiliki pemahaman logika yang baik. Tetap tingkatkan latihan membuat program!</span></div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px">
+          <div>
+            <div class="small">Guru Mapel</div>
+            <div style="margin-top:24px;font-weight:700">Senpai kazuma</div>
+          </div>
+          <div style="text-align:right;color:var(--muted);font-size:12px">
+            <div>Dicetak pada:</div>
+            <div id="printedDate"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FORM -->
+      <div>
+        <div class="card form-panel">
+          <label>Nama Siswa</label>
+          <input type="text" id="inpName" value="Reno Tri">
+
+          <div class="row">
+            <div>
+              <label>Kelas</label>
+              <input type="text" id="inpClass" value="X PPLG 1">
+            </div>
+            <div>
+              <label>Nomor Absen</label>
+              <input type="text" id="inpNo" value="999">
+            </div>
+          </div>
+
+          <label>Mata Pelajaran</label>
+          <input type="text" id="inpSubject" value="Dasar Pemrograman Komputer">
+
+          <label>Deskripsi Singkat</label>
+          <textarea id="inpDesc">Mata pelajaran ini membahas dasar-dasar logika pemrograman, algoritma, serta pengenalan bahasa pemrograman seperti C# dan Python. Tujuannya agar siswa mampu memahami cara kerja program komputer dan membuat aplikasi sederhana.</textarea>
+
+          <div class="row">
+            <div>
+              <label>Nilai Tugas (0-100)</label>
+              <input type="text" id="inpG1" value="90">
+            </div>
+            <div>
+              <label>Nilai UTS (0-100)</label>
+              <input type="text" id="inpG2" value="85">
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Nilai UAS (0-100)</label>
+              <input type="text" id="inpG3" value="88">
+            </div>
+            <div>
+              <label>Semester</label>
+              <input type="text" id="inpSemester" value="Ganjil (2025/2026)">
+            </div>
+          </div>
+
+          <label>Catatan Guru</label>
+          <textarea id="inpNote">Reno aktif dalam pembelajaran, rajin mengerjakan tugas, dan memiliki pemahaman logika yang baik. Tetap tingkatkan latihan membuat program!</textarea>
+
+          <label>Nama Sekolah</label>
+          <input type="text" id="inpSchool" value="SMK Negeri 1 Wadaslintang">
+
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <button id="updateBtn">Perbarui Pratinjau</button>
+            <button id="copyBtn" class="btn-ghost">Salin ke Clipboard</button>
+          </div>
+
+          <div class="small">Tip: Tekan <strong>"Cetak / Simpan PDF"</strong> untuk menyimpan kartu ini sebagai PDF.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Utility
+    function qs(id){return document.getElementById(id)}
+    function calcTotal(a,b,c){
+      a = Number(a)||0; b = Number(b)||0; c = Number(c)||0;
+      // bobot: 30,30,40
+      const total = (a*0.3)+(b*0.3)+(c*0.4);
+      return Math.round(total*10)/10;
+    }
+
+    function updatePreview(){
+      qs('studentName').textContent = qs('inpName').value || 'Nama Siswa';
+      qs('classText').textContent = qs('inpClass').value || '-';
+      qs('subjectText').textContent = qs('inpSubject').value || '-';
+      qs('descText').textContent = qs('inpDesc').value || '';
+      qs('noteText').textContent = qs('inpNote').value || '';
+      qs('schoolName').textContent = qs('inpSchool').value || 'Nama Sekolah';
+      qs('semesterText').textContent = qs('inpSemester').value || '';
+
+      const g1 = qs('inpG1').value; const g2 = qs('inpG2').value; const g3 = qs('inpG3').value;
+      qs('g1').textContent = g1||'0'; qs('g2').textContent = g2||'0'; qs('g3').textContent = g3||'0';
+      qs('totalGrade').textContent = calcTotal(g1,g2,g3);
+
+      // logo initials
+      const initials = (qs('inpSchool').value||'').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase()||'KP';
+      qs('logoText').textContent = initials;
+
+      // printed date
+      const d = new Date();
+      qs('printedDate').textContent = d.toLocaleDateString('id-ID');
+    }
+
+    // Events
+    qs('updateBtn').addEventListener('click',()=>{ updatePreview(); });
+    qs('printBtn').addEventListener('click',()=>{ window.print(); });
+    qs('resetBtn').addEventListener('click',()=>{ location.reload(); });
+
+    // copy whole card html to clipboard
+    qs('copyBtn').addEventListener('click', async ()=>{
+      try{
+        const html = qs('previewCard').outerHTML;
+        await navigator.clipboard.writeText(html);
+        alert('HTML kartu telah disalin ke clipboard. Kamu bisa menempelkannya ke file HTML.');
+      }catch(e){ alert('Gagal menyalin: '+e.message) }
+    });
+
+    // live update on input change (small debounce)
+    const inputs = document.querySelectorAll('input, textarea');
+    let t;
+    inputs.forEach(el=>el.addEventListener('input',()=>{ clearTimeout(t); t=setTimeout(updatePreview,200); }));
+
+    // initial render
+    updatePreview();
+  </script>
+</body>
+</html>
